@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edge-capture
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edge-capture
+  template:
+    metadata:
+      labels:
+        app: edge-capture
+    spec:
+      containers:
+      - name: edge-capture
+        image: olorin/edge-capture:latest
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        env:
+        - name: MQTT_BROKER
+          value: "mqtt://lorawan-gateway:1883"
+        - name: SLO_LATENCY
+          value: "8000"  # in milliseconds
+        ports:
+        - containerPort: 8080
